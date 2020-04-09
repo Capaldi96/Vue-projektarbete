@@ -106,10 +106,10 @@ export default {
       this.links.forEach( el => {
         
         switch (el.interface){
-          case 'GitHub':  console.log(webReg.exec(el.url)); break;
-          case 'Slack' : console.log(webReg.exec(el.url));break;
-          case 'Trello' : console.log(webReg.exec(el.url));break;
-          case 'Google docs' : console.log(webReg.exec(el.url));break;
+          case 'GitHub':      console.log('GitHub Link: ' + webReg.exec(el.url)[3]==='github' ? true:false); break;
+          case 'Slack' :      console.log('Slack Link: ' + webReg.exec(el.url)[3]==='app.slack' ? true:false);break;
+          case 'Trello' :     console.log('Trello Link: ' + webReg.exec(el.url)[3]==='trello' ? true:false);break;
+          case 'Google docs' :console.log('Google Docs Link: ' + webReg.exec(el.url));break;
         }
       })
     }
