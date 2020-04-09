@@ -60,15 +60,16 @@
                     placeholder="URL link"
                     trim
                     v-model="item.url"
+                    :state="valid2"
                   ></b-form-input>
                 </div>
                 <button class="btn btn-success add" @click="add" type="button">Add Link +</button>
 
-                <button
-                  class="btn btn-lg btn-primary btn-block text-uppercase"
+                <b-button
+                  squared variant="btn btn-lg btn-primary btn-block "
                   type="button"
                   @click="check"
-                >Create project</button>
+                >Create project</b-button>
               </form>
             </div>
           </div>
@@ -84,11 +85,18 @@ export default {
     valid() {
       return this.input.length > 2 ? true : false;
     },
-
+    valid2(){
+      return this.checku
+    }
   },
+  beforeUpdate(){
+    return this.checku
+  },
+  
   data() {
     return {
-      text:"",
+      checku: null,
+      text: "",
       input: "",
       links: [{ interface: "", url: "" }]
     };
@@ -100,30 +108,62 @@ export default {
     del(index) {
       this.links.splice(index, 1);
     },
-    check(){
-     var webReg = new RegExp(/^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/) //eslint-disable-line
-      var gDocs = ''
-    //google docs link breaks the program as well the broweser tab freezed >:()
-      this.links.forEach( el => {
-        
-        switch (el.interface){
-          case 'GitHub': console.log(webReg.exec(el.url)[3] === "github" ? true:false); break;
-          case 'Slack' : console.log(webReg.exec(el.url)[3] === "app.slack" ? true:false);break;
-          case 'Trello' : console.log(webReg.exec(el.url)[3]==="trello" ? true:false);break;
-          case 'Google docs' : 
-          if(el.url.length > 60){
-            gDocs = el.url.substring(0,32)  //link too long and crashes with the regex so taking only  https://docs.google.com/document
-            console.log(webReg.exec(gDocs)[3]==="docs.google" ? true:false);
-          }else{
-            console.log(false)
-          }
-          break;
+    check() {
+      var webReg = new RegExp(/^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/ );  //eslint-disable-line
+      var gDocs = "";
+      //google docs link breaks the program as well the broweser tab freezed >:()
+      //console.log(webReg.exec(el.url)[3] === "github" ? true : false);
+      this.links.forEach(el => { //abomination of a code
+        switch (el.interface) {
+          case "GitHub":
+            if(el.url.length > 60){
+              console.log(false)
+            }else if(webReg.exec(el.url)[3] === "github"){
+              console.log(true)
+              this.checku = true;
+            }else{
+              console.log(false);
+              this.checku = false
+            }
+            break;
+          case "Slack":
+            if(el.url.length > 60){
+              console.log(false)
+            }else if(webReg.exec(el.url)[3] === "app.slack"){
+              console.log(true)
+              this.checku = true;
+            }else{
+              console.log(false);
+              this.checku = false
+            }
+            break;
+          case "Trello":
+            if(el.url.length > 60){
+              console.log(false)
+            }else if(webReg.exec(el.url)[3] === "trello"){
+              console.log(true)
+              this.checku = true;
+            }else{
+              console.log(false);
+              this.checku = false
+            }
+            break;
+          case "Google docs":
+            if (el.url.length > 60) {
+              gDocs = el.url.substring(0, 32); //link too long and crashes with the regex so taking only  https://docs.google.com/document
+              console.log(
+                webReg.exec(gDocs)[3] === "docs.google" ? true : false);
+                this.checku = true;
+            } else {
+              console.log(false);
+              this.checku = false;
+            }
+            break;
         }
-      })
+      });
     }
   }
 };
-
 </script>
 
 
@@ -153,7 +193,7 @@ export default {
   padding-top: 10px;
 }
 
-.selector{
+.selector {
   margin-bottom: 10px;
 }
 </style>
