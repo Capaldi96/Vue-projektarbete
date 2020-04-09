@@ -102,19 +102,28 @@ export default {
     },
     check(){
      var webReg = new RegExp(/^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/) //eslint-disable-line
-       
+      var gDocs = ''
+    //google docs link breaks the program as well the broweser tab freezed >:()
       this.links.forEach( el => {
         
         switch (el.interface){
-          case 'GitHub':      console.log('GitHub Link: ' + webReg.exec(el.url)[3]==='github' ? true:false); break;
-          case 'Slack' :      console.log('Slack Link: ' + webReg.exec(el.url)[3]==='app.slack' ? true:false);break;
-          case 'Trello' :     console.log('Trello Link: ' + webReg.exec(el.url)[3]==='trello' ? true:false);break;
-          case 'Google docs' :console.log('Google Docs Link: ' + webReg.exec(el.url));break;
+          case 'GitHub': console.log(webReg.exec(el.url)[3] === "github" ? true:false); break;
+          case 'Slack' : console.log(webReg.exec(el.url)[3] === "app.slack" ? true:false);break;
+          case 'Trello' : console.log(webReg.exec(el.url)[3]==="trello" ? true:false);break;
+          case 'Google docs' : 
+          if(el.url.length > 60){
+            gDocs = el.url.substring(0,32)  //link too long and crashes with the regex so taking only  https://docs.google.com/document
+            console.log(webReg.exec(gDocs)[3]==="docs.google" ? true:false);
+          }else{
+            console.log(false)
+          }
+          break;
         }
       })
     }
   }
 };
+
 </script>
 
 
