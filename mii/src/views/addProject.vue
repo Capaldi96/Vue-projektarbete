@@ -5,7 +5,31 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
           <div class="card card-signin my-5">
             <div class="card-body">
-              <h5 class="card-title text-left">Add Project</h5>
+              <h5 class="card-title text-left">Add Project 
+                <img 
+                  v-b-modal.modal-center
+                  class="info" 
+                  src="../assets/info.svg" 
+                  alt="info">
+                </h5>
+                  <b-modal id="modal-center" ok-only title="Information">
+                    <pre class="infoModal"><p>                   
+Project Name: At least 3 characters 
+long. 
+Verification (optional): 
+Provided url links are verified by
+checking the coresponding selected
+platform such as GitHub, Slack, Trello 
+and Goodle docs.
+
+Note!: 
+
+Verification with links that are longer 
+might give false validation.  
+                      </p>
+                    </pre>
+                    
+                  </b-modal>
               <hr class="my-4" />
               <form class="form-signin">
                 <div class="form-label-group text-left">
@@ -197,4 +221,16 @@ export default {
 .selector {
   margin-bottom: 10px;
 }
+
+.info{
+  height: 23px;
+  float: right;
+}
+
+.infoModal{
+  white-space: pre-wrap;
+  padding-left: 20px ;
+}
+
+
 </style>
