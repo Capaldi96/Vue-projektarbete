@@ -21,11 +21,12 @@ Provided url links are verified by
 checking the coresponding selected
 platform such as GitHub, Slack, Trello 
 and Goodle docs.
-
+<span class="note">
 Note!: 
 
 Verification with links that are longer 
-might give false validation.  
+might give false validation. 
+</span> 
                       </p>
                     </pre>
                     
@@ -192,6 +193,7 @@ export default {
 
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap%27');
 .link {
   padding-top: 10px;
 }
@@ -230,7 +232,11 @@ export default {
 .infoModal{
   white-space: pre-wrap;
   padding-left: 20px ;
+  font-family: 'Quicksand', sans-serif,monospace;
+  font-size: 0.9em;
+
 }
-
-
+.note{
+  color: red;
+}
 </style>
