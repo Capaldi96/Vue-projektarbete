@@ -17,6 +17,7 @@
                     placeholder="project name"
                     v-model="input"
                     :state="valid"
+                    
                   ></b-form-input>
                   <b-form-invalid-feedback id="input-live-feedback">Enter at least 3 letters</b-form-invalid-feedback>
                 </div>
@@ -58,12 +59,18 @@
                   ></b-form-input>
                 </div>
                 <button class="btn btn-success add" @click="add" type="button">Add Link +</button>
+                
+                <b-button   
+                  squared variant="outline-info btn-lg btn-block"
+                  type="button"
+                  @click="check"
+                > Verify Links (optional)</b-button>
 
                 <b-button
                   squared variant="btn btn-lg btn-primary btn-block "
                   type="button"
-                  @click="check"
                 >Create project</b-button>
+                
               </form>
             </div>
           </div>
@@ -77,13 +84,13 @@
 export default {
   computed: {
     valid() {
-      return this.input.length > 2 ? true : false;
-    }
-  },
-  beforeUpdate(){
-    return this.links.checku
-  },
-  
+      if(this.input === ''){
+        return null
+      }else{
+          return this.input.length > 2 ? true : false;
+        }
+      }  
+  },  
   data() {
     return {
       
@@ -140,6 +147,9 @@ export default {
           case "Google docs":        
               gDocs = el.url.substring(0, 32); //link too long and crashes with the regex so taking only  https://docs.google.com/document
               console.log(webReg.exec(gDocs)[3] === "docs.google" ? el.checku = true : el.checku = false);
+            break;
+          case "Other":
+              console.log(el.checku = true)
             break;
         }
       });
