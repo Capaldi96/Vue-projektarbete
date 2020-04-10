@@ -105,50 +105,41 @@ export default {
       //google docs link breaks the program as well the broweser tab freezed >:()
       //console.log(webReg.exec(el.url)[3] === "github" ? true : false);
       this.links.forEach(el => { //abomination of a code
+
+      console.log(el.url.length)
         switch (el.interface) {
           case "GitHub":
-            if(el.url.length > 60 && webReg.exec(el.url) !== null ){
-              console.log(false)
+            if(el.url.length > 65){
+              console.log(el.checku = false)
+              
             }else if(webReg.exec(el.url)[3] === "github"){
-              console.log(true)
-              el.checku = true;
+              console.log(el.checku = true)
+              
             }else{
-              console.log(false);
-              el.checku = false;
+              console.log(el.checku = false)
             }
             break;
           case "Slack":
             if(el.url.length > 60){
-              console.log(false)
+              console.log(el.checku = false)
             }else if(webReg.exec(el.url)[3] === "app.slack"){
-              el.checku = true;
-              this.checku = true;
+              console.log(el.checku = true);
             }else{
-              console.log(false);
-              el.checku = false;
+              console.log(el.checku = false)  
             }
             break;
           case "Trello":
             if(el.url.length > 60){
-              console.log(false)
+              console.log(el.checku = false)
             }else if(webReg.exec(el.url)[3] === "trello"){
-              console.log(true)
-               el.checku = true;
+              console.log(el.checku = true)
             }else{
-              console.log(false);
-              el.checku = false;
+              console.log(el.checku = false)    
             }
             break;
-          case "Google docs":
-            if (el.url.length > 60) {
+          case "Google docs":        
               gDocs = el.url.substring(0, 32); //link too long and crashes with the regex so taking only  https://docs.google.com/document
-              console.log(
-                webReg.exec(gDocs)[3] === "docs.google" ? true : false);
-                 el.checku = true;
-            } else {
-              console.log(false);
-              el.checku = false;
-            }
+              console.log(webReg.exec(gDocs)[3] === "docs.google" ? el.checku = true : el.checku = false);
             break;
         }
       });
