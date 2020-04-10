@@ -46,13 +46,7 @@
                     <option>Google docs</option>
                     <option>Other</option>
                   </select>
-                  <!-- <input
-                    class="form-control urlInput"
-                    type="text"
-                    placeholder="Related URL"
-                    :state="validation"
-                    v-model="item.url"
-                  />-->
+                  
                   <b-form-input
                     class="label"
                     id="input-live"
@@ -60,7 +54,7 @@
                     placeholder="URL link"
                     trim
                     v-model="item.url"
-                    :state="valid2"
+                    :state="item.checku"
                   ></b-form-input>
                 </div>
                 <button class="btn btn-success add" @click="add" type="button">Add Link +</button>
@@ -84,26 +78,23 @@ export default {
   computed: {
     valid() {
       return this.input.length > 2 ? true : false;
-    },
-    valid2(){
-      return this.checku
     }
   },
   beforeUpdate(){
-    return this.checku
+    return this.links.checku
   },
   
   data() {
     return {
-      checku: null,
+      
       text: "",
       input: "",
-      links: [{ interface: "", url: "" }]
+      links: [{ interface: "", url: "", checku: null }]
     };
   },
   methods: {
     add() {
-      this.links.push({ interface: "", url: "" });
+      this.links.push({ interface: "", url: "", checku: null });
     },
     del(index) {
       this.links.splice(index, 1);
@@ -116,25 +107,25 @@ export default {
       this.links.forEach(el => { //abomination of a code
         switch (el.interface) {
           case "GitHub":
-            if(el.url.length > 60){
+            if(el.url.length > 60 && webReg.exec(el.url) !== null ){
               console.log(false)
             }else if(webReg.exec(el.url)[3] === "github"){
               console.log(true)
-              this.checku = true;
+              el.checku = true;
             }else{
               console.log(false);
-              this.checku = false
+              el.checku = false;
             }
             break;
           case "Slack":
             if(el.url.length > 60){
               console.log(false)
             }else if(webReg.exec(el.url)[3] === "app.slack"){
-              console.log(true)
+              el.checku = true;
               this.checku = true;
             }else{
               console.log(false);
-              this.checku = false
+              el.checku = false;
             }
             break;
           case "Trello":
@@ -142,10 +133,10 @@ export default {
               console.log(false)
             }else if(webReg.exec(el.url)[3] === "trello"){
               console.log(true)
-              this.checku = true;
+               el.checku = true;
             }else{
               console.log(false);
-              this.checku = false
+              el.checku = false;
             }
             break;
           case "Google docs":
@@ -153,10 +144,10 @@ export default {
               gDocs = el.url.substring(0, 32); //link too long and crashes with the regex so taking only  https://docs.google.com/document
               console.log(
                 webReg.exec(gDocs)[3] === "docs.google" ? true : false);
-                this.checku = true;
+                 el.checku = true;
             } else {
               console.log(false);
-              this.checku = false;
+              el.checku = false;
             }
             break;
         }
@@ -183,6 +174,7 @@ export default {
 
 .rm {
   float: right;
+  cursor: pointer;
 }
 
 .rm:hover {
