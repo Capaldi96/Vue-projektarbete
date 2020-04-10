@@ -96,7 +96,7 @@ export default {
   },  
   data() {
     return {
-      url : "https://jsonbox.io/demobox_6d9e326c183fde7b",
+      APIurl : "https://jsonbox.io/demobox_6d9e326c183fde7b",
       text: "",
       input: "",
       links: [{ interface: "", url: "", checku: null }]
@@ -110,7 +110,7 @@ export default {
       this.links.splice(index, 1);
     },
     addJsonBox() {
-      axios.post(this.url, { projectName: this.input, comments: this.text, links: this.links })
+      axios.post(this.APIurl, { projectName: this.input, comments: this.text, links: this.links })
       .then(res => console.log(res.data))
       .catch(err => console.log('usually dosent work' + err))
     },
