@@ -51,12 +51,13 @@
                   <b-form-input
                     class="label"
                     id="input-live"
-                    aria-describedby="input-live-help input-live-feedback"
+                    aria-describedby="input-live-help input-feedback"
                     placeholder="URL link"
                     trim
                     v-model="item.url"
                     :state="item.checku"
                   ></b-form-input>
+                  <b-form-invalid-feedback id="input-feedback">Link does not correspont to platform selected</b-form-invalid-feedback>
                 </div>
                 <button class="btn btn-success add" @click="add" type="button">Add Link +</button>
                 
@@ -69,6 +70,7 @@
                 <b-button
                   squared variant="btn btn-lg btn-primary btn-block "
                   type="button"
+                  @click="addJsonBox"
                 >Create project</b-button>
                 
               </form>
@@ -81,6 +83,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   computed: {
     valid() {
@@ -93,7 +96,7 @@ export default {
   },  
   data() {
     return {
-      
+      url : "https://jsonbox.io/demobox_6d9e326c183fde7b",
       text: "",
       input: "",
       links: [{ interface: "", url: "", checku: null }]
@@ -105,6 +108,11 @@ export default {
     },
     del(index) {
       this.links.splice(index, 1);
+    },
+    addJsonBox() {
+      axios.post(this.url, { projectName: this.input, comments: this.text, links: this.links })
+      .then(res => console.log(res.data))
+      .catch(err => console.log('usually dosent work' + err))
     },
     check() {
       var webReg = new RegExp(/^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/ );  //eslint-disable-line
