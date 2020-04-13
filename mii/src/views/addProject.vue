@@ -121,7 +121,7 @@ export default {
   },  
   data() {
     return {
-      APIurl : "https://jsonbox.io/demobox_6d9e326c183fde7b",
+      APIurl : "https://jsonbox.io/vueProjekt_feu2019ECutbildning",
       text: "",
       input: "",
       links: [{ interface: "", url: "", checku: null }]
