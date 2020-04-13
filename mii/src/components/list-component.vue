@@ -23,20 +23,22 @@
               </div>
             </div>
           </transition>
+          <editComponent v-if="modify"></editComponent>
     </div>
 </template>
 <script>
-// import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
+import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
 import axios from 'axios'
 export default {
   name: 'listComponent',
   components: {
-    // editComponent
+    editComponent
   },
   data: () => ({
     loggedIn:false,
     projects:Array,
     error:false,
+    modify:true,
     errorMsg: String,
   }),
   methods:{
