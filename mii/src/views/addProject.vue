@@ -12,7 +12,7 @@
                   src="../assets/info.svg" 
                   alt="info">
                 </h5>
-                  <b-modal id="modal-center" ok-only title="Information">
+                  <b-modal id="modal-center" ok-only  title="Information">
                     <pre class="infoModal"><p>                   
 Project Name: At least 3 characters 
 long. 
@@ -93,11 +93,13 @@ might give false validation.
                 > Verify Links (optional)</b-button>
 
                 <b-button
+                  
                   squared variant="btn btn-lg btn-primary btn-block "
                   type="button"
                   @click="addJsonBox"
+                  :disabled = "!valid"
                 >Create project</b-button>
-                
+              
               </form>
             </div>
           </div>
@@ -121,6 +123,8 @@ export default {
   },  
   data() {
     return {
+      
+      butDisable: null,
       APIurl : "https://jsonbox.io/vueProjekt_feu2019ECutbildning",
       text: "",
       input: "",
@@ -135,9 +139,12 @@ export default {
       this.links.splice(index, 1);
     },
     addJsonBox() {
-      axios.post(this.APIurl, { projectName: this.input, comments: this.text, links: this.links })
-      .then(res => console.log(res.data))
-      .catch(err => console.log('usually dosent work' + err))
+        
+         axios.post(this.APIurl, { projectName: this.input, comments: this.text, links: this.links })
+        .then(res => alert('Project: ' + res.data.projectName + ' has been added.'))
+        .catch(err => console.log('usually dosent work' + err))
+        this.input = ''
+     
     },
     check() {
       var webReg = new RegExp(/^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/ );  //eslint-disable-line
