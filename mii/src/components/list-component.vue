@@ -27,12 +27,11 @@
     </div>
 </template>
 <script>
-<<<<<<< HEAD
-import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed
-=======
+
+
 import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
 import axios from 'axios'
->>>>>>> 9e3aed6e3e8d59712a8807ba9b1929dda6b11cc3
+
 export default {
   name: 'listComponent',
   components: {
