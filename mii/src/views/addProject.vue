@@ -1,5 +1,6 @@
 <template>
   <div class="addProject">
+    <transition name="fade-in" appear>
     <div class="container">
       <div class="row">
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -106,6 +107,7 @@ might give false validation.
         </div>
       </div>
     </div>
+    </transition>
   </div>
 </template>
 
@@ -205,6 +207,16 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap%27');
+ .fade-in-enter, .fade-in-leave-to{
+    opacity: 0;
+  }
+  .fade-in-enter-active{
+    transition: opacity 1000ms;
+  }
+  .fade-in-leave-active{
+    transition: opacity 1000ms;
+  }
+
 .link {
   padding-top: 10px;
 }
