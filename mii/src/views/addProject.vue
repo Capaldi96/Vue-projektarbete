@@ -139,11 +139,15 @@ export default {
       this.links.splice(index, 1);
     },
     addJsonBox() {
-        
-         axios.post(this.APIurl, { projectName: this.input, comments: this.text, links: this.links })
-        .then(res => alert('Project: ' + res.data.projectName + ' has been added.'))
-        .catch(err => console.log('usually dosent work' + err))
-        this.input = ''
+        if(this.links[0].interface === '' || this.links[0].url === ''){
+          alert('set at least one link or platform is not selected')
+        }else{
+          axios.post(this.APIurl, { projectName: this.input, comments: this.text, links: this.links })
+         .then(res => alert('Project: ' + res.data.projectName + ' has been added.'))
+         .catch(err => console.log('usually dosent work' + err))
+          this.input = ''
+        }
+         
      
     },
     check() {
