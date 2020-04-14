@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
+import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed
 export default {
 
   name: 'listComponent',
