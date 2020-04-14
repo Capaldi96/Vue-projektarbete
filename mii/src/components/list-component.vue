@@ -10,31 +10,29 @@
                     <span>&times;</span>
                   </button>
                   <div class="card-body">
-                    <h4 class="card-title">{{project.projectName}}</h4>
+                    <h5 class="card-title">{{project.projectName}}</h5>
                     <div class="card-text">
                       <div v-if="project.comments" class="members">Comments:<p>{{project.comments}}</p></div>
                       <div class="links">
                         <div v-for="(link,index) in project.links" :key="`link-${index}`">
-                          <a :href="link.url" class=" links btn btn-primary btn-sm btn-block" data-toggle="tooltip" :title="link.url">{{link.interface}}</a>
+                          <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
                         </div>
-                      </div>
-                      
+                      </div>  
                       <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!loggedIn">Modify</button>
-                      <div>
-                        <small v-if="project._updatedOn" class="text-muted">Updated: {{project._updatedOn.substr(0,10)}}</small>
-                        <small v-else class="text-muted">Created: {{project._createdOn.substr(0,10)}}</small>
-                      </div>
-                    </div>
+                    </div>                    
+                  </div>
+                  <div class="card-footer text-muted">
+                    <small v-if="project._updatedOn">Updated: {{project._updatedOn.substr(0,10)}}</small>
+                    <small v-else>Created: {{project._createdOn.substr(0,10)}}</small>
                   </div>
                 </div>
               </div>
             </div>
           </transition>
-          <editComponent v-if="showModifyComponent" :editData="identifier"></editComponent>
+          <editComponent v-if="showModifyComponent" :editProject="identifier"></editComponent>
     </div>
 </template>
 <script>
-
 
 import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
 import axios from 'axios'
@@ -45,7 +43,7 @@ export default {
     editComponent
   },
   data: () => ({
-    loggedIn:true,
+    loggedIn:false,
     projects:Array,
     showModifyComponent:false,
     isDisabled:true,
