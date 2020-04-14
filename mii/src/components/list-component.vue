@@ -27,8 +27,11 @@
     </div>
 </template>
 <script>
+
+
 import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
 import axios from 'axios'
+
 export default {
   name: 'listComponent',
   components: {
