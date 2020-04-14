@@ -1,5 +1,6 @@
 <template>
   <div class="addProject">
+    <transition name="fade-in" appear>
     <div class="container">
       <div class="row">
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -106,6 +107,7 @@ might give false validation.
         </div>
       </div>
     </div>
+    </transition>
   </div>
 </template>
 
@@ -139,11 +141,15 @@ export default {
       this.links.splice(index, 1);
     },
     addJsonBox() {
-        
-         axios.post(this.APIurl, { projectName: this.input, comments: this.text, links: this.links })
-        .then(res => alert('Project: ' + res.data.projectName + ' has been added.'))
-        .catch(err => console.log('usually dosent work' + err))
-        this.input = ''
+        if(this.links[0].interface === '' || this.links[0].url === ''){
+          alert('set at least one link or platform is not selected')
+        }else{
+          axios.post(this.APIurl, { projectName: this.input, comments: this.text, links: this.links })
+         .then(res => alert('Project: ' + res.data.projectName + ' has been added.'))
+         .catch(err => console.log('usually dosent work' + err))
+          this.input = ''
+        }
+         
      
     },
     check() {
@@ -201,6 +207,16 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap%27');
+ .fade-in-enter, .fade-in-leave-to{
+    opacity: 0;
+  }
+  .fade-in-enter-active{
+    transition: opacity 1000ms;
+  }
+  .fade-in-leave-active{
+    transition: opacity 1000ms;
+  }
+
 .link {
   padding-top: 10px;
 }
