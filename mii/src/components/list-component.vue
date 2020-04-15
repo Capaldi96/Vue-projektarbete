@@ -10,13 +10,14 @@
                     <span>&times;</span>
                   </button>
                   <div class="card-body">
-                    <h4 class="card-title">{{project.projectName}}</h4>
+                    <h5 class="card-title">{{project.projectName}}</h5>
                     <div class="card-text">
                       <div v-if="project.comments" class="members">Comments:<p>{{project.comments}}</p></div>
                       <div class="links">
                         <div v-for="(link,index) in project.links" :key="`link-${index}`">
-                          <a :href="link.url" class=" links btn btn-primary btn-sm btn-block" data-toggle="tooltip" :title="link.url">{{link.interface}}</a>
+                          <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
                         </div>
+
                       </div>
                       
                       <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth">Modify</button>
@@ -31,12 +32,9 @@
             </div>
           </transition>
           <editComponent v-if="showModifyComponent" :editData="identifier"></editComponent>
-
-          <button  :disabled="!loggedIn" class="btn btn-danger">oafhaoho</button>
     </div>
 </template>
 <script>
-
 
 import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
 import axios from 'axios'
