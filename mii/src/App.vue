@@ -15,7 +15,6 @@
               <router-link to="/addProject">Add Project</router-link>
             </b-nav-item>
           </b-navbar-nav>
-
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
              <b-nav-item-dropdown right>

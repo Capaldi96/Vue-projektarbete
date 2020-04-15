@@ -1,8 +1,9 @@
 <template>
     <div>
       <div v-if="!showModifyComponent" class="container">
+        <h1>All Projects</h1>
         <div class="search-box">
-            <b-form-input id="input-none" v-model="search" placeholder="Search for project"></b-form-input>
+            <b-form-input id="input-none" v-model="search" placeholder="Search project"></b-form-input>
         </div>
         <div class="error-log" v-show="isDisabled">{{message}}</div>
         <transition name="fade-in" appear>
