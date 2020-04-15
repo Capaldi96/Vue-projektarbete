@@ -19,7 +19,7 @@
                         </div>
                       </div>
                       
-                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="loggedIn">Modify</button>
+                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth">Modify</button>
                       <div>
                         <small v-if="project._updatedOn" class="text-muted">Updated: {{project._updatedOn.substr(0,10)}}</small>
                         <small v-else class="text-muted">Created: {{project._createdOn.substr(0,10)}}</small>
@@ -31,6 +31,8 @@
             </div>
           </transition>
           <editComponent v-if="showModifyComponent" :editData="identifier"></editComponent>
+
+          <button  :disabled="!loggedIn" class="btn btn-danger">oafhaoho</button>
     </div>
 </template>
 <script>
@@ -38,14 +40,15 @@
 
 import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
 import axios from 'axios'
-
+import data from '../service/data'
 export default {
   name: 'listComponent',
   components: {
     editComponent
   },
+  mixins: [data],
   data: () => ({
-    loggedIn:true,
+    loggedIn:false,
     projects:Array,
     showModifyComponent:false,
     isDisabled:true,
@@ -62,6 +65,7 @@ export default {
     }
     },
     listProjects(){
+      console.log('API called')
       this.waitingForApi(true);
       axios.get('https://jsonbox.io/vueProjekt_feu2019ECutbildning')
       .then(response => {
@@ -86,13 +90,21 @@ export default {
       })
     },
     editProject(param){
+      
       this.identifier = param;
       this.showModifyComponent = true;
+      
     }
   },
   created(){
+    this.loggedIn = this.getAuth()
     this.listProjects();
-  },  
+    
+  },
+   destroyed(){
+    this.loggedIn = this.getAuth()
+    //this.listProjects();
+   }
 }
 </script>
 <style scoped>

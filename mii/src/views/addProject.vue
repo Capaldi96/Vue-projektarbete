@@ -142,7 +142,7 @@ export default {
     },
     addJsonBox() {
       
-        for(let i =0;i<this.links.length; i++){
+        for(let i =0;i<this.links.length; i++){ //if user enters empty url or did not chose platform will omit from the array 
           if(this.links[i].url === "" || this.links[i].interface === ""){
             this.links.splice(i,1)
           }
