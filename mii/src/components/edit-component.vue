@@ -1,18 +1,19 @@
 <template>
-  <div class="addProject">
+  <div class="updateProject">
     <div class="container">
       <div class="row">
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
           <div class="card card-signin my-5">
             <div class="card-body">
-              <h5 class="card-title text-left">Edit Project 
+              <h5 class="card-title text-center, error-log" v-if="deletedProject"><strong>{{input}}</strong> DELETED</h5>
+              <h5 class="card-title text-left" v-if="!deletedProject">Edit Project 
                 <img 
                   v-b-modal.modal-center
                   class="info" 
                   src="../assets/info.svg" 
                   alt="info">
                 </h5>
-                  <b-modal id="modal-center" ok-only  title="Information">
+                  <b-modal v-if="!deletedProject" id="modal-center" ok-only  title="Information">
                     <pre class="infoModal"><p>                   
 Project Name: At least 3 characters 
 long. 
@@ -31,8 +32,11 @@ might give false validation.
                     </pre>
                     
                   </b-modal>
+
+
               <hr class="my-4" />
-              <form class="form-signin">
+              <form class="form-signin" >
+                <section v-if="!deletedProject">
                 <div class="form-label-group text-left">
                   <label for="prName">Project Name</label>
                   <b-form-input
@@ -46,7 +50,7 @@ might give false validation.
                   ></b-form-input>
                   <b-form-invalid-feedback id="input-live-feedback">Enter at least 3 letters</b-form-invalid-feedback>
                 </div>
-
+                
                 <div class="text-left">
                   <label class="label" for="te">Description</label>
                   <b-form-textarea
@@ -57,7 +61,8 @@ might give false validation.
                     max-rows="8"
                   ></b-form-textarea>
                 </div>
-                <div
+                
+                <div 
                   class="form-group text-left link"
                   id="app"
                   v-for="(item,index) in links"
@@ -85,21 +90,50 @@ might give false validation.
                   <b-form-invalid-feedback id="input-feedback">Link does not correspont to platform selected</b-form-invalid-feedback>
                 </div>
                 <button class="btn btn-success add" @click="add" type="button">Add Link +</button>
-                <button class="btn btn-success add" @click="listObjects()" type="button">Get Data</button>
                 
-                <b-button   
+                <p v-if="messageUpdateSuccess && !isDisabled" class="justGreen"><strong>&#10004;</strong> {{this.input}} successfully updated {{this.updateTimeStamp.substring(11, 19)}}</p>
+                <p v-show="isDisabled">{{message}}</p>
+                <p class="error-log" v-show="error">{{errorMsg}}</p>
+                </section>
+
+                <b-button v-if="!deletedProject"
                   squared variant="outline-info btn-lg btn-block"
                   type="button"
                   @click="check"
                 > Verify Links (optional)</b-button>
 
-                <b-button
-                  
+                <b-button v-if="!deletedProject"
                   squared variant="btn btn-lg btn-primary btn-block "
                   type="button"
                   @click="updateJsonBox"
                   :disabled = "!valid"
                 >Update Project</b-button>
+
+                <b-button v-if="!deletedProject && !confirmDelete"
+                  squared variant="btn btn-lg btn-primary btn-block "
+                  type="button"
+                  @click="confirmDelete = true"
+                  :disabled = "!valid"
+                >Delete project</b-button>
+
+                <!-- <b-button v-if="!deletedProject && confirmDelete"
+                  squared variant="btn btn-lg btn-block deleteConfirm"
+                  type="button"
+                  @click="deleteProject"
+                  :disabled = "!valid"
+                >Click To Confirm Delete</b-button> -->
+
+                <button v-if="!deletedProject && confirmDelete" class="btn-block flexSpace btn-lg" type="button">
+                <button class="btn deleteConfirm" type="button" @click="deleteProject">Confirm Delete</button>
+                <button class="btn deleteUndo" type="button" @click="confirmDelete = false">Undo Delete</button>
+                </button>
+
+                <b-button
+                  squared variant="btn btn-lg btn-primary btn-block "
+                  type="button"
+                  @click="closeEditBackToList"
+                  :disabled = "!valid"
+                >Back to view projects</b-button>
 
                 
 
@@ -116,6 +150,11 @@ might give false validation.
 <script>
 import axios from 'axios'
 export default {
+
+  props: {
+      editProject: String()
+  },
+
   computed: {
     valid() {
       if(this.input === ''){
@@ -135,32 +174,100 @@ export default {
       input: "",
       links: [{ interface: "", url: "", checku: null }],
 
+      updateTimeStamp: "",
+
       projects:Array,
       error:false,
       modify:true,
       errorMsg: String,
+
+      isDisabled:true,
+      message: String,
+
+      messageUpdateSuccess: false,
+      deletedProject: false,
+      confirmDelete: false
+
     };
   },
   methods: {
+    closeEditBackToList() {
+      this.$emit('showListComponent');
+    },
+
+
     addDataFromAPi(projects) {
-        this.input = projects.projectName;
-        this.text = projects.comments;
-        this.links = projects.links;
+      this.input = projects.projectName;
+      this.text = projects.comments;
+      this.links = projects.links;
+      this.updateTimeStamp = projects._updatedOn;
     },
 
     /*-----------------------------*/
+    waitingForApi(waiting){
+    if(waiting == true){
+      this.message = 'The API is loading please wait';
+      this.isDisabled = true;
+    } else{
+      this.isDisabled = false;
+    }
+    },
+
     listObjects(){
-      axios.get('https://jsonbox.io/vueProjekt_feu2019ECutbildning' + this.APIurlId)
+      this.error = false;
+      this.errorMsg = '';
+      this.waitingForApi(true);
+      axios.get('https://jsonbox.io/vueProjekt_feu2019ECutbildning' + '/' + this.editProject)
       .then(response => {
         console.log(response.data);
+        this.waitingForApi(false);
         this.projects = response.data;
         this.addDataFromAPi(this.projects)
-
       })
       .catch(e => {
         this.error = true;
         this.errorMsg = 'Failed to load project list, reload the page to try again'
         console.log(e);
+      })
+    },
+
+      updateJsonBox() {
+      this.waitingForApi(true);
+      axios.put(this.APIurl + '/' + this.editProject, { projectName: this.input, comments: this.text, links: this.links })
+        .then(res => {
+        this.waitingForApi(false);
+        this.listObjects()
+        console.log(res)
+        if (res.status == "200" || res.data.message == "Record updated.") {
+          this.messageUpdateSuccess = true;
+        } else {
+          this.messageUpdateSuccess = false;
+        }
+        })
+        .catch(err => {
+        console.log(err)
+        this.input = ''
+        this.error = true;
+        this.errorMsg = 'Failed to update'
+        })
+      },
+
+      deleteProject(){
+      this.waitingForApi(true);
+      axios.delete('https://jsonbox.io/vueProjekt_feu2019ECutbildning' + '/' + this.editProject)
+      .then(response => {
+        this.waitingForApi(false);
+        console.log(response)
+        if (response.status == "200" || response.data.message == "Record removed.") {
+          this.deletedProject = true;
+        } else {
+          this.deletedProject = false;
+        }
+      })
+      .catch(e => {
+        console.log(e)
+        this.error = true;
+        this.errorMsg = 'Failed to delete project'
       })
     },
     /*-----------------------------*/
@@ -170,15 +277,7 @@ export default {
     del(index) {
       this.links.splice(index, 1);
     },
-    updateJsonBox() {
-        
-         axios.put(this.APIurl + this.APIurlId, { projectName: this.input, comments: this.text, links: this.links })
-        .then(res => alert('Project: ' + res.data.projectName + ' has been added.'))
-        this.listObjects()
-        .catch(err => console.log('usually dosent work' + err))
-        this.input = ''
-     
-    },
+
     check() {
       var webReg = new RegExp(/^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/ );  //eslint-disable-line
       var gDocs = "";
@@ -227,7 +326,10 @@ export default {
         }
       });
     }
-  }
+  },
+    created(){
+    this.listObjects();
+  },  
 };
 </script>
 
@@ -278,5 +380,27 @@ export default {
 }
 .note{
   color: red;
+}
+
+.error-log {
+  color: red;
+}
+
+.deleteConfirm { background-color: red; color: white;}
+.deleteConfirm:hover { background-color: rgb(184, 3, 3); color: white;}
+
+.deleteUndo { background-color: rgb(109, 173, 182); color: white;}
+.deleteUndo:hover { background-color: rgb(81, 129, 136); color: white;}
+
+.justGreen {
+  color:#28a745;
+}
+
+.flexSpace {
+  display: flex;
+  justify-content: space-evenly;
+  
+
+
 }
 </style>
