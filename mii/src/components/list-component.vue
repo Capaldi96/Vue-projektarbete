@@ -6,47 +6,48 @@
             <b-form-input id="input-none" v-model="search" placeholder="Search project"></b-form-input>
         </div>
         <div class="error-log" v-show="isDisabled">{{message}}</div>
-        <transition name="fade-in" appear>
-          <div class="row">
-            <div class="col-lg-4 col-sm-6 mb-4" v-for="project in filterProjects" :key="project._id">
-              <div class="card h-100" >
-                <button v-if="loggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
-                  <span>&times;</span>
-                </button>
-                <div class="card-body">
-                  <h5 class="card-title">{{project.projectName}}</h5>
-                  <div class="card-text">
-                    <div v-if="project.comments" class="members">Comments:<p>{{project.comments}}</p></div>
-                    <div class="links">
-                      <div v-for="(link,index) in project.links" :key="`link-${index}`">
-                        <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
+          <transition name="fade-in" appear>
+            <div class="row">
+              <div class="col-lg-4 col-sm-6 mb-4" v-for="project in projects" :key="project._id">
+                <div class="card h-100" >
+                  <button v-if="loggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
+                    <span>&times;</span>
+                  </button>
+                  <div class="card-body">
+                    <h5 class="card-title">{{project.projectName}}</h5>
+                    <div class="card-text">
+                      <div v-if="project.comments" class="members">Comments:<p>{{project.comments}}</p></div>
+                      <div class="links">
+                        <div v-for="(link,index) in project.links" :key="`link-${index}`">
+                          <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
+                        </div>
+                      </div>                      
+                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth">Modify</button>
+                      <div>
+                        <small v-if="project._updatedOn" class="text-muted">Updated: {{project._updatedOn.substr(0,10)}}</small>
+                        <small v-else class="text-muted">Created: {{project._createdOn.substr(0,10)}}</small>
                       </div>
-                    </div>  
-                    <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!loggedIn">Modify</button>
-                  </div>                    
-                </div>
-                <div class="card-footer text-muted">
-                  <small v-if="project._updatedOn">Updated: {{project._updatedOn.substr(0,10)}}</small>
-                  <small v-else>Created: {{project._createdOn.substr(0,10)}}</small>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </transition>
-      </div>
-      <editComponent v-if="showModifyComponent" :editProject="identifier" @showListComponent="showListComponentAgain"></editComponent>
+          </transition>
+        </div>
+          <editComponent v-if="showModifyComponent" :editData="identifier"></editComponent>
     </div>
 </template>
 <script>
 
 import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
 import axios from 'axios'
-
+import data from '../service/data'
 export default {
   name: 'listComponent',
   components: {
     editComponent
   },
+  mixins: [data],
   data: () => ({
     search: "",
     loggedIn: false,
@@ -78,6 +79,7 @@ export default {
     
     },
     listProjects(){
+      console.log('API called')
       this.waitingForApi(true);
       axios.get('https://jsonbox.io/vueProjekt_feu2019ECutbildning')
       .then(response => {
@@ -102,13 +104,21 @@ export default {
       })
     },
     editProject(param){
+      
       this.identifier = param;
       this.showModifyComponent = true;
+      
     }
   },
   created(){
+    this.loggedIn = this.getAuth()
     this.listProjects();
-  },  
+    
+  },
+   destroyed(){
+    this.loggedIn = this.getAuth()
+    //this.listProjects();
+   }
 }
 </script>
 <style scoped>

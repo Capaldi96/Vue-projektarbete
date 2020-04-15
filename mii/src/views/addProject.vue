@@ -141,14 +141,20 @@ export default {
       this.links.splice(index, 1);
     },
     addJsonBox() {
-        if(this.links[0].interface === '' || this.links[0].url === ''){
-          alert('set at least one link or platform is not selected')
-        }else{
-          axios.post(this.APIurl, { projectName: this.input, comments: this.text, links: this.links })
-         .then(res => alert('Project: ' + res.data.projectName + ' has been added.'))
-         .catch(err => console.log('usually dosent work' + err))
-          this.input = ''
+      
+        for(let i =0;i<this.links.length; i++){ //if user enters empty url or did not chose platform will omit from the array 
+          if(this.links[i].url === "" || this.links[i].interface === ""){
+            this.links.splice(i,1)
+          }
         }
+        
+         axios.post(this.APIurl, { projectName: this.input, comments: this.text, links: this.links })
+        .then(res => alert('Project: ' + res.data.projectName + ' has been added.'))
+        .catch(err => console.log('usually dosent work' + err))
+        this.input = ''
+      
+       
+        
          
      
     },

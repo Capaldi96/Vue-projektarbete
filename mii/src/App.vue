@@ -17,13 +17,18 @@
           </b-navbar-nav>
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
-             <b-nav-item-dropdown right>
-            <!--  Using 'button-content' slot -->
+            <!-- <b-nav-form>
+              <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
+              <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+            </b-nav-form> -->
+
+            <b-nav-item-dropdown right>
+              <!-- Using 'button-content' slot -->
               <template v-slot:button-content>
                 <em>Log in</em>
               </template>
-              <b-dropdown-item href="#">Log In</b-dropdown-item>
-              <b-dropdown-item href="#">Log Out</b-dropdown-item>
+              <b-dropdown-item href="#" @click="authenticated(true)">Log In</b-dropdown-item>
+              <b-dropdown-item href="#" @click="authenticated(false)">Log Out</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -33,25 +38,16 @@
   </div>
 </template>
 <script>
-  export default {
-    data: () => ({
-      loginState:false,
-      loginMessage: 'Login',
-    }),
-    methods: {
-      loginStatus(state){
-        if(state == true){
-          this.loginMessage = 'Login';
-          this.loginState = false;
-        } else{
-          this.loginMessage = 'Logout';
-          this.loginState = true;
-        }
-      }
-
+import data from './service/data'
+export default {
+  mixins: [data],
+    methods:{
+      
     }
-  };
+}
 </script>
+
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
