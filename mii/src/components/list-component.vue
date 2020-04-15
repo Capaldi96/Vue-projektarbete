@@ -34,7 +34,7 @@
           </div>
         </transition>
       </div>
-      <editComponent v-if="showModifyComponent" :editProject="identifier"></editComponent>
+      <editComponent v-if="showModifyComponent" :editProject="identifier" @showListComponent="showListComponentAgain"></editComponent>
     </div>
 </template>
 <script>
@@ -64,6 +64,10 @@ export default {
     }
   },
   methods:{
+    showListComponentAgain() { /*Added by Tobias */
+      this.showModifyComponent = false;
+      this.listProjects();
+    },
     waitingForApi(waiting){
     if(waiting == true){
       this.message = 'The API is loading please wait';
@@ -71,6 +75,7 @@ export default {
     } else{
       this.isDisabled = false;
     }
+    
     },
     listProjects(){
       this.waitingForApi(true);
@@ -135,6 +140,13 @@ export default {
   }
   .btn-secondary:disabled{
     cursor:not-allowed;
+  }
+  .members { /* Added by Tobias to be able to scroll comments */
+  max-height: 9em;
+  background-color: white;
+  padding: 0.5em;
+  margin-top: 0.7em;
+  overflow: auto;
   }
     
 </style>
