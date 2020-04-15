@@ -1,35 +1,39 @@
 <template>
-    <div v-if="!showModifyComponent" class="container">
-        <h1>Projects</h1>
+    <div>
+      <div v-if="!showModifyComponent" class="container">
+        <div class="search-box">
+            <b-form-input id="input-none" v-model="search" placeholder="Search for project"></b-form-input>
+        </div>
         <div class="error-log" v-show="isDisabled">{{message}}</div>
-          <transition name="fade-in" appear>
-            <div class="row">
-              <div class="col-lg-4 col-sm-6 mb-4" v-for="project in projects" :key="project._id">
-                <div class="card h-100" >
-                  <button v-if="loggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
-                    <span>&times;</span>
-                  </button>
-                  <div class="card-body">
-                    <h5 class="card-title">{{project.projectName}}</h5>
-                    <div class="card-text">
-                      <div v-if="project.comments" class="members">Comments:<p>{{project.comments}}</p></div>
-                      <div class="links">
-                        <div v-for="(link,index) in project.links" :key="`link-${index}`">
-                          <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
-                        </div>
-                      </div>  
-                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!loggedIn">Modify</button>
-                    </div>                    
-                  </div>
-                  <div class="card-footer text-muted">
-                    <small v-if="project._updatedOn">Updated: {{project._updatedOn.substr(0,10)}}</small>
-                    <small v-else>Created: {{project._createdOn.substr(0,10)}}</small>
-                  </div>
+        <transition name="fade-in" appear>
+          <div class="row">
+            <div class="col-lg-4 col-sm-6 mb-4" v-for="project in filterProjects" :key="project._id">
+              <div class="card h-100" >
+                <button v-if="loggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
+                  <span>&times;</span>
+                </button>
+                <div class="card-body">
+                  <h5 class="card-title">{{project.projectName}}</h5>
+                  <div class="card-text">
+                    <div v-if="project.comments" class="members">Comments:<p>{{project.comments}}</p></div>
+                    <div class="links">
+                      <div v-for="(link,index) in project.links" :key="`link-${index}`">
+                        <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
+                      </div>
+                    </div>  
+                    <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!loggedIn">Modify</button>
+                  </div>                    
+                </div>
+                <div class="card-footer text-muted">
+                  <small v-if="project._updatedOn">Updated: {{project._updatedOn.substr(0,10)}}</small>
+                  <small v-else>Created: {{project._createdOn.substr(0,10)}}</small>
                 </div>
               </div>
             </div>
-          </transition>
-          <editComponent v-if="showModifyComponent" :editProject="identifier"></editComponent>
+          </div>
+        </transition>
+      </div>
+      <editComponent v-if="showModifyComponent" :editProject="identifier"></editComponent>
     </div>
 </template>
 <script>
@@ -43,13 +47,21 @@ export default {
     editComponent
   },
   data: () => ({
-    loggedIn:false,
-    projects:Array,
+    search: "",
+    loggedIn: false,
+    projects:[],
     showModifyComponent:false,
     isDisabled:true,
     message: String,
     identifier: String,
   }),
+  computed:{
+    filterProjects:function(){
+      return this.projects.filter((project) =>{
+        return project.projectName.toLowerCase().match(this.search.toLowerCase());
+      });
+    }
+  },
   methods:{
     waitingForApi(waiting){
     if(waiting == true){
@@ -111,6 +123,9 @@ export default {
     position: absolute;
     top:0;
     right:0.2em;
+  }
+  .search-box{
+    padding:2em 0 2em 0;
   }
   .card-body{
     display:flex;
