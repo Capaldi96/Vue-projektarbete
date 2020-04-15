@@ -23,12 +23,12 @@
                         </div>
                       </div>                      
                       <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth">Modify</button>
-                      <div>
-                        <small v-if="project._updatedOn" class="text-muted">Updated: {{project._updatedOn.substr(0,10)}}</small>
-                        <small v-else class="text-muted">Created: {{project._createdOn.substr(0,10)}}</small>
-                      </div>
                     </div>
                   </div>
+                  <div class="card-footer">
+                    <small v-if="project._updatedOn" class="text-muted">Updated: {{project._updatedOn.substr(0,10)}}</small>
+                    <small v-else class="text-muted">Created: {{project._createdOn.substr(0,10)}}</small>
+                    </div>
                 </div>
               </div>
             </div>
