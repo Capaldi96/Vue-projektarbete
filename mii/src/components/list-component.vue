@@ -22,7 +22,7 @@
                           <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
                         </div>
                       </div>                      
-                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth">Modify</button>
+                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth()">Modify</button>
                     </div>
                   </div>
                   <div class="card-footer">
@@ -118,7 +118,7 @@ export default {
   
    beforeUpdate(){
     this.loggedIn = this.getAuth()
-    //this.listProjects();
+    this.listProjects();
    }
 }
 </script>
