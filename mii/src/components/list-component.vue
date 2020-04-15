@@ -101,7 +101,8 @@ export default {
     this.listProjects();
     
   },
-   destroyed(){
+  
+   beforeUpdate(){
     this.loggedIn = this.getAuth()
     //this.listProjects();
    }
