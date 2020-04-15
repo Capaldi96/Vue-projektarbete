@@ -2,7 +2,7 @@
   <div id="app">
     <div>
       <b-navbar toggleable="lg" type="dark" variant="dark">
-        <b-navbar-brand href="#">MII</b-navbar-brand>
+        <b-navbar-brand href="#"><img src="./assets/logo-mii.svg"></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -15,7 +15,6 @@
               <router-link to="/addProject">Add Project</router-link>
             </b-nav-item>
           </b-navbar-nav>
-
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
             <!-- <b-nav-form>
@@ -38,7 +37,6 @@
     <router-view />
   </div>
 </template>
-
 <script>
 import data from './service/data'
 export default {

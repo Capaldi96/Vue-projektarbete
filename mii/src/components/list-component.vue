@@ -1,6 +1,10 @@
 <template>
-    <div v-if="!showModifyComponent" class="container">
-        <h1>Projects</h1>
+    <div>
+      <div v-if="!showModifyComponent" class="container">
+        <h1>All Projects</h1>
+        <div class="search-box">
+            <b-form-input id="input-none" v-model="search" placeholder="Search project"></b-form-input>
+        </div>
         <div class="error-log" v-show="isDisabled">{{message}}</div>
           <transition name="fade-in" appear>
             <div class="row">
@@ -17,21 +21,20 @@
                         <div v-for="(link,index) in project.links" :key="`link-${index}`">
                           <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
                         </div>
-
-                      </div>
-                      
+                      </div>                      
                       <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth">Modify</button>
-                      <div>
-                        <small v-if="project._updatedOn" class="text-muted">Updated: {{project._updatedOn.substr(0,10)}}</small>
-                        <small v-else class="text-muted">Created: {{project._createdOn.substr(0,10)}}</small>
-                      </div>
                     </div>
                   </div>
+                  <div class="card-footer">
+                    <small v-if="project._updatedOn" class="text-muted">Updated: {{project._updatedOn.substr(0,10)}}</small>
+                    <small v-else class="text-muted">Created: {{project._createdOn.substr(0,10)}}</small>
+                    </div>
                 </div>
               </div>
             </div>
           </transition>
-          <editComponent v-if="showModifyComponent" :editData="identifier"></editComponent>
+          </div>
+          <editComponent v-if="showModifyComponent" :editProject="identifier" @showListComponent="showListComponentAgain"></editComponent>
     </div>
 </template>
 <script>
@@ -46,14 +49,26 @@ export default {
   },
   mixins: [data],
   data: () => ({
-    loggedIn:false,
-    projects:Array,
+    search: "",
+    loggedIn: false,
+    projects:[],
     showModifyComponent:false,
     isDisabled:true,
     message: String,
     identifier: String,
   }),
+  computed:{
+    filterProjects:function(){
+      return this.projects.filter((project) =>{
+        return project.projectName.toLowerCase().match(this.search.toLowerCase());
+      });
+    }
+  },
   methods:{
+    showListComponentAgain() { /*Added by Tobias */
+      this.showModifyComponent = false;
+      this.listProjects();
+    },
     waitingForApi(waiting){
     if(waiting == true){
       this.message = 'The API is loading please wait';
@@ -61,6 +76,7 @@ export default {
     } else{
       this.isDisabled = false;
     }
+    
     },
     listProjects(){
       console.log('API called')
@@ -125,6 +141,9 @@ export default {
     top:0;
     right:0.2em;
   }
+  .search-box{
+    padding:2em 0 2em 0;
+  }
   .card-body{
     display:flex;
     flex-direction: column;
@@ -132,6 +151,13 @@ export default {
   }
   .btn-secondary:disabled{
     cursor:not-allowed;
+  }
+  .members { /* Added by Tobias to be able to scroll comments */
+  max-height: 9em;
+  background-color: white;
+  padding: 0.5em;
+  margin-top: 0.7em;
+  overflow: auto;
   }
     
 </style>
