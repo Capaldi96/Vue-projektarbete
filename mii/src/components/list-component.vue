@@ -8,9 +8,9 @@
         <div class="error-log" v-show="isDisabled">{{message}}</div>
           <transition name="fade-in" appear>
             <div class="row">
-              <div class="col-lg-4 col-sm-6 mb-4" v-for="project in projects" :key="project._id">
+              <div class="col-lg-4 col-sm-6 mb-4" v-for="project in filterProjects" :key="project._id">
                 <div class="card h-100" >
-                  <button v-if="loggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
+                  <button v-if="$isLoggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
                     <span>&times;</span>
                   </button>
                   <div class="card-body">
@@ -22,7 +22,7 @@
                           <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
                         </div>
                       </div>                      
-                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth()">Modify</button>
+                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!$isLoggedIn">Modify</button>
                     </div>
                   </div>
                   <div class="card-footer">
@@ -41,16 +41,13 @@
 
 import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
 import axios from 'axios'
-import data from '../service/data'
 export default {
   name: 'listComponent',
   components: {
     editComponent
   },
-  mixins: [data],
   data: () => ({
     search: "",
-    loggedIn: false,
     projects:[],
     showModifyComponent:false,
     isDisabled:true,
@@ -79,7 +76,6 @@ export default {
     
     },
     listProjects(){
-      console.log('API called')
       this.waitingForApi(true);
       axios.get('https://jsonbox.io/vueProjekt_feu2019ECutbildning')
       .then(response => {
@@ -104,22 +100,13 @@ export default {
       })
     },
     editProject(param){
-      
       this.identifier = param;
       this.showModifyComponent = true;
-      
     }
   },
   created(){
-    this.loggedIn = this.getAuth()
     this.listProjects();
-    
   },
-  
-   beforeUpdate(){
-    this.loggedIn = this.getAuth()
-    this.listProjects();
-   }
 }
 </script>
 <style scoped>
