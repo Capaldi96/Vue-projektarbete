@@ -10,7 +10,7 @@
             <div class="row">
               <div class="col-lg-4 col-sm-6 mb-4" v-for="project in filterProjects" :key="project._id">
                 <div class="card h-100" >
-                  <button v-if="$isLoggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
+                  <button v-if="isLoggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
                     <span>&times;</span>
                   </button>
                   <div class="card-body">
@@ -19,10 +19,10 @@
                       <div v-if="project.comments" class="members">Comments:<p>{{project.comments}}</p></div>
                       <div class="links">
                         <div v-for="(link,index) in project.links" :key="`link-${index}`">
-                          <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
+                          <a :href="link.url" target="_blank" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
                         </div>
                       </div>                      
-                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!$isLoggedIn">Modify</button>
+                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!isLoggedIn">Modify</button>
                     </div>
                   </div>
                   <div class="card-footer">

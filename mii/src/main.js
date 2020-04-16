@@ -10,13 +10,13 @@ Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 
 let globalData = new Vue({
-  data:{ $isLoggedIn:false }
+  data:{ isLoggedIn:false }
 })
 Vue.mixin({
   computed:{
-      $isLoggedIn:{
-          get: function(){ return globalData.$data.$isLoggedIn},
-          set: function(state){ globalData.$data.$isLoggedIn = state }
+      isLoggedIn:{
+          get: function(){ return globalData.$data.isLoggedIn},
+          set: function(state){ globalData.$data.isLoggedIn = state }
       }
   }
 })
