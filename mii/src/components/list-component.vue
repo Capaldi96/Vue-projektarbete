@@ -8,7 +8,7 @@
         <div class="error-log" v-show="isDisabled">{{message}}</div>
           <transition name="fade-in" appear>
             <div class="row">
-              <div class="col-lg-4 col-sm-6 mb-4" v-for="project in projects" :key="project._id">
+              <div class="col-lg-4 col-sm-6 mb-4" v-for="project in filterProjects" :key="project._id">
                 <div class="card h-100" >
                   <button v-if="loggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
                     <span>&times;</span>
