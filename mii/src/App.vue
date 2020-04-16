@@ -11,7 +11,7 @@
             <b-nav-item href="#">
               <router-link to="/">View Projects</router-link>
             </b-nav-item>
-            <b-nav-item href="#">
+            <b-nav-item v-show="$isLoggedIn" href="#">
               <router-link to="/addProject">Add Project</router-link>
             </b-nav-item>
           </b-navbar-nav>
@@ -27,8 +27,8 @@
               <template v-slot:button-content>
                 <em>Log in</em>
               </template>
-              <b-dropdown-item href="#" @click="authenticated(true)">Log In</b-dropdown-item>
-              <b-dropdown-item href="#" @click="authenticated(false)">Log Out</b-dropdown-item>
+              <b-dropdown-item href="#" @click="$isLoggedIn = true">Log In</b-dropdown-item>
+              <b-dropdown-item href="#" @click="$isLoggedIn = false">Log Out</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
