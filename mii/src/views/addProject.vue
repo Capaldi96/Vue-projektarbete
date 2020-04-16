@@ -152,7 +152,9 @@ export default {
         .then(res => alert('Project: ' + res.data.projectName + ' has been added.'))
         .catch(err => console.log('usually dosent work' + err))
         this.input = ''
-      
+        this.text = ''
+        this.links = [{ interface: "", url: "", checku: null }]
+
        
         
          
