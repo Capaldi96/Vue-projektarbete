@@ -8,9 +8,9 @@
         <div class="error-log" v-show="isDisabled">{{message}}</div>
           <transition name="fade-in" appear>
             <div class="row">
-              <div class="col-lg-4 col-sm-6 mb-4" v-for="project in projects" :key="project._id">
+              <div class="col-lg-4 col-sm-6 mb-4" v-for="project in filterProjects" :key="project._id">
                 <div class="card h-100" >
-                  <button v-if="loggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
+                  <button v-if="isLoggedIn" @click="deleteProject(project._id)" type="button" class="close" aria-label="Close">
                     <span>&times;</span>
                   </button>
                   <div class="card-body">
@@ -19,11 +19,10 @@
                       <div v-if="project.comments" >Comments:<p>{{project.comments}}</p></div>
                       <div class="links">
                         <div v-for="(link,index) in project.links" :key="`link-${index}`">
-                          <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
+                          <a :href="link.url" target="_blank" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
                         </div>
                       </div>                      
-                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth">Modify</button>
-                      <button @click="detailsProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block">See all details...</button>
+                      <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!isLoggedIn">Modify</button>
                     </div>
                   </div>
                   
@@ -45,17 +44,14 @@
 import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
 import detailsComponent from './details-component'
 import axios from 'axios'
-import data from '../service/data'
 export default {
   name: 'listComponent',
   components: {
     editComponent,
     detailsComponent
   },
-  mixins: [data],
   data: () => ({
     search: "",
-    loggedIn: false,
     projects:[],
     showModifyComponent:false,
     showDetailsComponent:false, //Added by Tobias
@@ -86,7 +82,6 @@ export default {
     
     },
     listProjects(){
-      console.log('API called')
       this.waitingForApi(true);
       axios.get('https://jsonbox.io/vueProjekt_feu2019ECutbildning')
       .then(response => {
@@ -111,9 +106,9 @@ export default {
       })
     },
     editProject(param){
-      
       this.identifier = param;
       this.showModifyComponent = true;
+<<<<<<< HEAD
       
     },
     detailsProject(param){ // Added by tobias 
@@ -121,17 +116,13 @@ export default {
       this.identifier = param;
       this.showDetailsComponent = true;
       
+=======
+>>>>>>> origin
     }
   },
   created(){
-    this.loggedIn = this.getAuth()
     this.listProjects();
-    
   },
-   destroyed(){
-    this.loggedIn = this.getAuth()
-    //this.listProjects();
-   }
 }
 </script>
 <style scoped>
