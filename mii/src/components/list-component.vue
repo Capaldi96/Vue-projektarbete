@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div v-if="!showModifyComponent" class="container">
+      <div v-if="!showModifyComponent && !showDetailsComponent" class="container">
         <h1>All Projects</h1>
         <div class="search-box">
             <b-form-input id="input-none" v-model="search" placeholder="Search project"></b-form-input>
@@ -16,15 +16,17 @@
                   <div class="card-body">
                     <h5 class="card-title">{{project.projectName}}</h5>
                     <div class="card-text">
-                      <div v-if="project.comments" class="members">Comments:<p>{{project.comments}}</p></div>
+                      <div v-if="project.comments" >Comments:<p>{{project.comments}}</p></div>
                       <div class="links">
                         <div v-for="(link,index) in project.links" :key="`link-${index}`">
                           <a :href="link.url" class=" links btn btn-primary btn-sm btn-block">{{link.interface}}</a>
                         </div>
                       </div>                      
                       <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!getAuth">Modify</button>
+                      <button @click="detailsProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block">See all details...</button>
                     </div>
                   </div>
+                  
                   <div class="card-footer">
                     <small v-if="project._updatedOn" class="text-muted">Updated: {{project._updatedOn.substr(0,10)}}</small>
                     <small v-else class="text-muted">Created: {{project._createdOn.substr(0,10)}}</small>
@@ -35,17 +37,20 @@
           </transition>
           </div>
           <editComponent v-if="showModifyComponent" :editProject="identifier" @showListComponent="showListComponentAgain"></editComponent>
+          <detailsComponent v-if="showDetailsComponent" :detailsProjectId="identifier" @detailsShowListComponent="showListComponentAgain"></detailsComponent>
     </div>
 </template>
 <script>
 
 import editComponent from './edit-component'   // figure it out for edit component to only open when edit button pressed maybe routing
+import detailsComponent from './details-component'
 import axios from 'axios'
 import data from '../service/data'
 export default {
   name: 'listComponent',
   components: {
-    editComponent
+    editComponent,
+    detailsComponent
   },
   mixins: [data],
   data: () => ({
@@ -53,6 +58,7 @@ export default {
     loggedIn: false,
     projects:[],
     showModifyComponent:false,
+    showDetailsComponent:false, //Added by Tobias
     isDisabled:true,
     message: String,
     identifier: String,
@@ -67,6 +73,7 @@ export default {
   methods:{
     showListComponentAgain() { /*Added by Tobias */
       this.showModifyComponent = false;
+      this.showDetailsComponent = false;
       this.listProjects();
     },
     waitingForApi(waiting){
@@ -107,6 +114,12 @@ export default {
       
       this.identifier = param;
       this.showModifyComponent = true;
+      
+    },
+    detailsProject(param){ // Added by tobias 
+      
+      this.identifier = param;
+      this.showDetailsComponent = true;
       
     }
   },
@@ -154,8 +167,6 @@ export default {
   .members { /* Added by Tobias to be able to scroll comments */
   max-height: 9em;
   background-color: white;
-  padding: 0.5em;
-  margin-top: 0.7em;
   overflow: auto;
   }
     
