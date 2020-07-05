@@ -23,6 +23,7 @@
                         </div>
                       </div>                      
                       <button @click="editProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block" :disabled="!isLoggedIn">Modify</button>
+                      <button @click="detailsProject(project._id)" type="button" class="btn btn-secondary btn-sm btn-block">See all details...</button>
                     </div>
                   </div>
                   
@@ -108,16 +109,6 @@ export default {
     editProject(param){
       this.identifier = param;
       this.showModifyComponent = true;
-<<<<<<< HEAD
-      
-    },
-    detailsProject(param){ // Added by tobias 
-      
-      this.identifier = param;
-      this.showDetailsComponent = true;
-      
-=======
->>>>>>> origin
     }
   },
   created(){
